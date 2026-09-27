@@ -15,6 +15,9 @@ Bank/
 ├── Customer.java    → Merepresentasikan data nasabah beserta daftar rekeningnya
 ├── Bank.java        → Mengelola seluruh data nasabah dalam satu entitas bank
 ├── Main.java        → Entry point program, menyediakan menu interaktif
+├── image/           → Screenshot demo program
+│   ├── image.png
+│   ├── image-1.png ~ image-6.png
 └── README.md
 ```
 
@@ -145,18 +148,18 @@ java Main
 ```
 
 ## Tampilan Menu
-![alt text](image.png)
+![alt text](image/image.png)
 ### 1. Registrasi Nasabah
-![alt text](image-1.png)
+![alt text](image/image-1.png)
 
 ### 2. Daftar Nasabah
-![alt text](image-2.png)
+![alt text](image/image-2.png)
 ### 3. Buka Rekening Baru
-![alt text](image-3.png)
+![alt text](image/image-3.png)
 ### 4. Setor Tunai
-![alt text](image-4.png)
+![alt text](image/image-4.png)
 ### 5. Tarik Tunai
-![alt text](image-5.png)
+![alt text](image/image-5.png)
 ### 6. Cek Saldo
-![alt text](image-6.png)
+![alt text](image/image-6.png)
 
