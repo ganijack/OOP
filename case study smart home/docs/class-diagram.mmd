@@ -1,0 +1,163 @@
+classDiagram
+    direction TB
+
+    class User {
+        -String userId
+        -String name
+        -String role
+        +getUserId() String
+        +getName() String
+        +getRole() String
+        +isAdmin() boolean
+    }
+
+    class WiFiConnectable {
+        <<interface>>
+        +connectWiFi(String ssid, String password)* void
+        +disconnectWiFi()* void
+        +isWiFiConnected()* boolean
+        +getIpAddress()* String
+    }
+
+    class BatteryPowered {
+        <<interface>>
+        +getBatteryLevel()* int
+        +isLowBattery()* boolean
+        +recharge(int amount)* void
+    }
+
+    class Schedulable {
+        <<interface>>
+        +setSchedule(String startTime, String endTime)* void
+        +clearSchedule()* void
+        +isScheduleActive()* boolean
+        +getScheduleInfo()* String
+    }
+
+    class SmartDevice {
+        <<abstract>>
+        -String id
+        -String name
+        -String room
+        -boolean isOn
+        -double basePowerWatt
+        +turnOn() void
+        +turnOff() void
+        +isOn() boolean
+        +getId() String
+        +getName() String
+        +getRoom() String
+        +getBasePowerWatt() double
+        +describe() String
+        +operate()* void
+        +calculatePowerConsumption()* double
+        +getStatusSummary()* String
+    }
+
+    class SmartLamp {
+        -int brightness
+        -String color
+        -String scheduleStart
+        -String scheduleEnd
+        +setBrightness(int brightness) void
+        +setColor(String color) void
+        +getBrightness() int
+        +getColor() String
+        +operate() void
+        +calculatePowerConsumption() double
+        +getStatusSummary() String
+    }
+
+    class SmartAC {
+        -int targetTemperature
+        -int fanSpeed
+        -boolean wiFiConnected
+        -String connectedSsid
+        -String ipAddress
+        -String scheduleStart
+        -String scheduleEnd
+        +setTargetTemperature(int temp) void
+        +setFanSpeed(int fanSpeed) void
+        +getTargetTemperature() int
+        +getFanSpeed() int
+        +operate() void
+        +calculatePowerConsumption() double
+        +getStatusSummary() String
+    }
+
+    class SmartCamera {
+        -String resolution
+        -boolean nightVisionActive
+        -boolean isRecording
+        -int batteryLevel
+        -boolean wiFiConnected
+        -String connectedSsid
+        -String ipAddress
+        +setNightVision(boolean active) void
+        +startRecording() void
+        +stopRecording() void
+        +isRecording() boolean
+        +isNightVisionActive() boolean
+        +getResolution() String
+        +operate() void
+        +calculatePowerConsumption() double
+        +getStatusSummary() String
+    }
+
+    class SmartDoorbellCamera {
+        -int chimeVolume
+        -boolean motionDetectionEnabled
+        +setChimeVolume(int volume) void
+        +getChimeVolume() int
+        +toggleMotionDetection(boolean enable) void
+        +pressDoorbell() void
+        +triggerMotionAlert(String desc) void
+        +operate() void
+        +calculatePowerConsumption() double
+        +getStatusSummary() String
+    }
+
+    class SmartHub {
+        <<abstract>>
+        -String hubId
+        -String hubName
+        -User owner
+        -List~SmartDevice~ devices
+        +addDevice(SmartDevice device) void
+        +getDevices() List~SmartDevice~
+        +calculateTotalPowerConsumption() double
+        +turnOffAllDevices(User user) void
+        +printDashboard() void
+        +canAccess(User user)* boolean
+        +getHubType()* String
+    }
+
+    class StandardHomeHub {
+        +canAccess(User user) boolean
+        +getHubType() String
+    }
+
+    class SecureCloudHub {
+        -String serverRegion
+        +canAccess(User user) boolean
+        +getHubType() String
+        +getServerRegion() String
+    }
+
+    %% Relations
+    SmartDevice <|-- SmartLamp : extends
+    SmartDevice <|-- SmartAC : extends
+    SmartDevice <|-- SmartCamera : extends
+    SmartCamera <|-- SmartDoorbellCamera : extends (Multilevel)
+
+    Schedulable <|.. SmartLamp : implements
+    Schedulable <|.. SmartAC : implements
+    WiFiConnectable <|.. SmartAC : implements
+    WiFiConnectable <|.. SmartCamera : implements
+    BatteryPowered <|.. SmartCamera : implements
+
+    SmartHub <|-- StandardHomeHub : extends
+    SmartHub <|-- SecureCloudHub : extends
+
+    SmartHub "1" o-- "*" SmartDevice : manages
+    SmartHub "1" --> "1" User : owned by
