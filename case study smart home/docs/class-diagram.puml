@@ -10,10 +10,7 @@ skinparam classBorderColor #000000
 skinparam arrowColor #000000
 hide circle
 
-' Top Layer: Main and User
-class Main {
-    +{static} main(String[] args)$ void
-}
+' Top Layer: User
 
 class User {
     -String userId
@@ -176,6 +173,4 @@ SmartHub <|-- SecureCloudHub : extends
 SmartHub "1" o-- "*" SmartDevice : manages
 SmartHub "*" --> "1" User : owned by
 
-Main ..> SmartHub : uses
-Main ..> SmartDevice : uses
 @enduml
