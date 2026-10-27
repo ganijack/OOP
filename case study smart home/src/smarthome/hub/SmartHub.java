@@ -10,9 +10,9 @@ import java.util.List;
 
 /**
  * ABSTRACT CLASS: SmartHub
- * Pusat kendali otomasi dan ekosistem rumah pintar.
- * Mengelola koleksi perangkat pintar (List<SmartDevice>) dan menyajikan
- * dashboard pemantauan daya serta kontrol terpusat.
+ * Central controller managing the smart home automation ecosystem.
+ * Maintains a collection of devices (List<SmartDevice>) and provides
+ * polymorphic routines for status dashboards and centralized power monitoring.
  */
 public abstract class SmartHub {
 
@@ -23,9 +23,9 @@ public abstract class SmartHub {
 
     public SmartHub(String hubId, String hubName, User owner) {
         Validator.requireNonEmpty(hubId, "Hub ID");
-        Validator.requireNonEmpty(hubName, "Nama Hub");
+        Validator.requireNonEmpty(hubName, "Hub Name");
         if (owner == null) {
-            throw new IllegalArgumentException("Pemilik Hub (Owner) tidak boleh null.");
+            throw new IllegalArgumentException("Hub Owner must not be null.");
         }
 
         this.hubId = hubId.trim();
@@ -35,22 +35,21 @@ public abstract class SmartHub {
     }
 
     // ==========================================
-    // ABSTRACT METHODS (Diwariskan ke Subclass)
+    // ABSTRACT METHODS (Subclasses MUST implement)
     // ==========================================
 
     /**
-     * Memeriksa hak otorisasi pengguna untuk mengakses dan mengontrol perangkat pada Hub.
-     * Aturan akses berbeda tergantung apakah Hub bersifat Lokal Terbuka atau Cloud Terenkripsi.
+     * Verifies access permission for a given user attempting to manage the hub.
      *
-     * @param user pengguna yang mencoba mengakses
-     * @return true jika diizinkan, false jika ditolak
+     * @param user resident or guest attempting access
+     * @return true if permitted, false otherwise
      */
     public abstract boolean canAccess(User user);
 
     /**
-     * Mengembalikan identitas tipe dari Hub.
+     * Returns the descriptive hub classification type.
      *
-     * @return String tipe hub
+     * @return String hub type
      */
     public abstract String getHubType();
 
@@ -60,10 +59,10 @@ public abstract class SmartHub {
 
     public void addDevice(SmartDevice device) {
         if (device == null) {
-            throw new IllegalArgumentException("Perangkat tidak boleh null.");
+            throw new IllegalArgumentException("Device must not be null.");
         }
         devices.add(device);
-        System.out.printf("[%s] Perangkat '%s' (%s) berhasil didaftarkan ke hub.%n",
+        System.out.printf("[%s] Device '%s' (%s) registered to hub.%n",
                 hubName, device.getName(), device.getId());
     }
 
@@ -72,11 +71,10 @@ public abstract class SmartHub {
     }
 
     /**
-     * POLIMORFISME RUNTIME:
-     * Menghitung total pemakaian daya seluruh perangkat yang terhubung.
-     * Memanggil method calculatePowerConsumption() pada tipe abstrak SmartDevice,
-     * namun hasil kalkulasi secara otomatis mengikuti perilaku masing-masing objek konkret
-     * (SmartLamp, SmartAC, SmartCamera, SmartDoorbellCamera).
+     * RUNTIME POLYMORPHISM:
+     * Computes the cumulative real-time power draw of all connected devices.
+     * Invokes calculatePowerConsumption() on abstract SmartDevice references;
+     * execution dynamically resolves to each concrete device's custom formula.
      */
     public double calculateTotalPowerConsumption() {
         double totalWatt = 0.0;
@@ -87,13 +85,13 @@ public abstract class SmartHub {
     }
 
     /**
-     * POLIMORFISME RUNTIME:
-     * Mematikan seluruh perangkat dalam satu kali perintah terpusat (Energy Saving Routine).
+     * RUNTIME POLYMORPHISM:
+     * Executes centralized power-off routine across all managed devices.
      */
     public void turnOffAllDevices(User user) {
-        System.out.printf("%n>>> Eksekusi Rutinitas 'Matikan Semua Perangkat' oleh %s...%n", user.getName());
+        System.out.printf("%n>>> Executing 'Turn Off All Devices' routine by %s...%n", user.getName());
         if (!canAccess(user)) {
-            System.out.printf("[DITOLAK] Pengguna %s tidak memiliki wewenang mengontrol %s!%n",
+            System.out.printf("[DENIED] User %s does not have authority to control %s!%n",
                     user.getName(), hubName);
             return;
         }
@@ -101,29 +99,28 @@ public abstract class SmartHub {
         for (SmartDevice device : devices) {
             device.turnOff();
         }
-        System.out.printf("[SUKSES] Seluruh perangkat di %s berhasil dipadamkan.%n", hubName);
+        System.out.printf("[SUCCESS] All devices in %s successfully turned off.%n", hubName);
     }
 
     /**
-     * Menampilkan dashboard status seluruh perangkat di rumah pintar.
+     * Renders standard system dashboard for connected devices.
      */
     public void printDashboard() {
         System.out.println("\n" + "=".repeat(95));
-        System.out.printf("SMART HOME DASHBOARD - [%s] (Tipe: %s)%n", hubName, getHubType());
-        System.out.printf("Pemilik: %s | Total Perangkat: %d Unit%n", owner, devices.size());
+        System.out.printf("SMART HOME DASHBOARD - [%s] (Type: %s)%n", hubName, getHubType());
+        System.out.printf("Owner: %s | Total Devices: %d Units%n", owner, devices.size());
         System.out.println("-".repeat(95));
 
         if (devices.isEmpty()) {
-            System.out.println("   (Belum ada perangkat yang terpasang)");
+            System.out.println("   (No devices currently installed)");
         } else {
             for (SmartDevice device : devices) {
-                // Memanggil method describe() yang secara polimorfis memanggil calculatePowerConsumption()
                 System.out.println(" * " + device.describe());
             }
         }
 
         System.out.println("-".repeat(95));
-        System.out.printf("TOTAL ESTIMASI DAYA KONSUMSI SAAT INI: %.2f WATT%n", calculateTotalPowerConsumption());
+        System.out.printf("TOTAL ESTIMATED POWER CONSUMPTION: %.2f WATTS%n", calculateTotalPowerConsumption());
         System.out.println("=".repeat(95));
     }
 

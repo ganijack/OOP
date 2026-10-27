@@ -3,9 +3,9 @@ package smarthome.hub;
 import smarthome.model.User;
 
 /**
- * SUBCLASS: StandardHomeHub (Hub Jaringan Lokal Rumah)
- * Mengontrol perangkat pintar melalui jaringan lokal (LAN / Offline).
- * Mengizinkan seluruh anggota keluarga (ADMIN, MEMBER, GUEST) untuk mengontrol perangkat.
+ * SUBCLASS: StandardHomeHub (Local Area Household Hub)
+ * Coordinates smart devices over the local residential network.
+ * Grants open control access to any registered household member (ADMIN, MEMBER, GUEST).
  */
 public class StandardHomeHub extends SmartHub {
 
@@ -15,12 +15,12 @@ public class StandardHomeHub extends SmartHub {
 
     @Override
     public boolean canAccess(User user) {
-        // Pada hub lokal rumah, setiap penghuni yang terhubung diizinkan
+        // Local residential hub allows access to any recognized user
         return user != null;
     }
 
     @Override
     public String getHubType() {
-        return "Local Standard Hub (Akses Terbuka untuk Semua Penghuni)";
+        return "Local Standard Hub (Open Access for Household)";
     }
 }

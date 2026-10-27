@@ -3,18 +3,18 @@ package smarthome.model;
 import smarthome.validation.Validator;
 
 /**
- * Representasi pengguna (penghuni rumah) dalam ekosistem Smart Home.
+ * Represents a household resident / user within the Smart Home ecosystem.
  */
 public class User {
 
     private final String userId;
     private final String name;
-    private final String role; // contoh: "ADMIN", "MEMBER", "GUEST"
+    private final String role; // e.g., "ADMIN", "MEMBER", "GUEST"
 
     public User(String userId, String name, String role) {
         Validator.requireNonEmpty(userId, "User ID");
-        Validator.requireNonEmpty(name, "Nama User");
-        Validator.requireNonEmpty(role, "Role User");
+        Validator.requireNonEmpty(name, "User Name");
+        Validator.requireNonEmpty(role, "User Role");
 
         this.userId = userId.trim();
         this.name = name.trim();

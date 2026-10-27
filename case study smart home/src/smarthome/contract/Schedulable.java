@@ -1,35 +1,35 @@
 package smarthome.contract;
 
 /**
- * Interface untuk perangkat yang mendukung fitur timer/penjadwalan otomatis.
- * Menandakan kapabilitas "can-do" (dapat dijadwalkan waktu operasionalnya).
+ * Interface representing automated timer scheduling capability.
+ * Designates a "can-do" capability contract.
  */
 public interface Schedulable {
 
     /**
-     * Menyetel jadwal aktif dan nonaktif perangkat.
+     * Sets the operational active schedule window.
      *
-     * @param startTime waktu mulai (format HH:mm)
-     * @param endTime   waktu selesai (format HH:mm)
+     * @param startTime activation time (format HH:mm)
+     * @param endTime   deactivation time (format HH:mm)
      */
     void setSchedule(String startTime, String endTime);
 
     /**
-     * Menghapus jadwal operasional yang sudah disetel sebelumnya.
+     * Cancels any active operational schedule.
      */
     void clearSchedule();
 
     /**
-     * Memeriksa apakah jadwal operasional saat ini sedang aktif disetel.
+     * Checks whether an automated schedule is currently configured.
      *
-     * @return true jika ada jadwal aktif, false jika tidak ada
+     * @return true if schedule is active, false otherwise
      */
     boolean isScheduleActive();
 
     /**
-     * Mendapatkan deskripsi informasi jadwal yang terpasang.
+     * Returns a formatted descriptor of the active schedule.
      *
-     * @return String representasi jadwal
+     * @return String schedule descriptor
      */
     String getScheduleInfo();
 }

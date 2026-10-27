@@ -1,35 +1,35 @@
 package smarthome.contract;
 
 /**
- * Interface untuk perangkat yang memiliki kemampuan terhubung ke jaringan Wi-Fi.
- * Menandakan kapabilitas "can-do" (dapat terhubung ke jaringan).
+ * Interface representing the capability to connect to a Wi-Fi wireless network.
+ * Designates a "can-do" capability contract.
  */
 public interface WiFiConnectable {
 
     /**
-     * Menghubungkan perangkat ke Access Point Wi-Fi.
+     * Connects the device to a specified wireless network Access Point.
      *
-     * @param ssid     nama jaringan Wi-Fi
-     * @param password kata sandi Wi-Fi
+     * @param ssid     network SSID
+     * @param password network security key
      */
     void connectWiFi(String ssid, String password);
 
     /**
-     * Memutus koneksi Wi-Fi dari jaringan.
+     * Disconnects the device from the current Wi-Fi network.
      */
     void disconnectWiFi();
 
     /**
-     * Memeriksa status keterhubungan dengan jaringan Wi-Fi.
+     * Checks whether the device currently has an active Wi-Fi connection.
      *
-     * @return true jika terhubung, false jika tidak
+     * @return true if connected, false otherwise
      */
     boolean isWiFiConnected();
 
     /**
-     * Mendapatkan alamat IP yang dialokasikan ke perangkat.
+     * Retrieves the allocated IP address of the device.
      *
-     * @return String alamat IP atau null jika belum terhubung
+     * @return String IP address or null if offline
      */
     String getIpAddress();
 }

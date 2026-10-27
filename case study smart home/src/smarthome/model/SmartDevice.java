@@ -4,9 +4,8 @@ import smarthome.validation.Validator;
 
 /**
  * ABSTRACT CLASS: SmartDevice
- * Sebagai superclass (induk) dari seluruh perangkat pintar dalam sistem Smart Home.
- * Objek SmartDevice tidak dapat diinstansiasi secara langsung karena hanya berfungsi
- * sebagai cetak biru (blueprint) abstrak dari konsep umum "perangkat pintar".
+ * Serves as the abstract superclass for all smart devices in the system.
+ * Cannot be directly instantiated and provides common state and invariant behaviors.
  */
 public abstract class SmartDevice {
 
@@ -17,70 +16,68 @@ public abstract class SmartDevice {
     private final double basePowerWatt;
 
     /**
-     * Konstruktor SmartDevice untuk dipanggil oleh subclass via super(...).
+     * Protected constructor invoked by concrete subclasses via super(...).
      *
-     * @param id            identifier unik perangkat
-     * @param name          nama deskriptif perangkat
-     * @param room          lokasi ruangan perangkat diletakkan
-     * @param basePowerWatt daya listrik dasar dalam satuan Watt
+     * @param id            unique device identifier
+     * @param name          descriptive appliance name
+     * @param room          room location
+     * @param basePowerWatt base electrical power rating in Watts
      */
     public SmartDevice(String id, String name, String room, double basePowerWatt) {
         Validator.requireNonEmpty(id, "Device ID");
-        Validator.requireNonEmpty(name, "Nama Perangkat");
-        Validator.requireNonEmpty(room, "Lokasi Ruangan");
+        Validator.requireNonEmpty(name, "Device Name");
+        Validator.requireNonEmpty(room, "Room Location");
         Validator.requirePositive(basePowerWatt, "Base Power Watt");
 
         this.id = id.trim();
         this.name = name.trim();
         this.room = room.trim();
         this.basePowerWatt = basePowerWatt;
-        this.isOn = false; // default awal perangkat mati
+        this.isOn = false;
     }
 
     // ==========================================
-    // ABSTRACT METHODS (Wajib di-override oleh Subclass)
+    // ABSTRACT METHODS (Subclasses MUST override)
     // ==========================================
 
     /**
-     * Menjalankan fungsi operasional spesifik dari masing-masing jenis perangkat pintar.
-     * Tiap turunan memiliki perilaku kerja yang unik.
+     * Executes the primary operational task specific to the device type.
      */
     public abstract void operate();
 
     /**
-     * Menghitung konsumsi daya listrik riil saat ini (Watt/jam).
-     * Subclass dapat memodifikasi rumus sesuai pengaturan (misal kecerahan lampu, suhu AC, dsb).
+     * Calculates the current real-time electrical power consumption in Watts.
      *
-     * @return daya listrik dalam satuan Watt
+     * @return electrical power in Watts
      */
     public abstract double calculatePowerConsumption();
 
     /**
-     * Memberikan ringkasan status operasional spesifik dari perangkat.
+     * Produces a concise summary string representing current device status.
      *
-     * @return String ringkasan status
+     * @return String status descriptor
      */
     public abstract String getStatusSummary();
 
     // ==========================================
-    // CONCRETE METHODS (Diwariskan langsung ke Subclass)
+    // CONCRETE METHODS (Inherited by subclasses)
     // ==========================================
 
     public void turnOn() {
         if (!this.isOn) {
             this.isOn = true;
-            System.out.printf("[%s] %s di %s berhasil DINYALAKAN.%n", id, name, room);
+            System.out.printf("[%s] %s in %s powered ON.%n", id, name, room);
         } else {
-            System.out.printf("[%s] %s sudah dalam keadaan AKTIF.%n", id, name);
+            System.out.printf("[%s] %s is already ACTIVE.%n", id, name);
         }
     }
 
     public void turnOff() {
         if (this.isOn) {
             this.isOn = false;
-            System.out.printf("[%s] %s di %s berhasil DIMATIKAN.%n", id, name, room);
+            System.out.printf("[%s] %s in %s powered OFF.%n", id, name, room);
         } else {
-            System.out.printf("[%s] %s memang sudah NONAKTIF.%n", id, name);
+            System.out.printf("[%s] %s is already INACTIVE.%n", id, name);
         }
     }
 
@@ -105,12 +102,12 @@ public abstract class SmartDevice {
     }
 
     /**
-     * Template method konkret untuk menampilkan baris informasi perangkat pada dashboard.
+     * Concrete template method formatting standard device status for dashboards.
      */
     public final String describe() {
         String powerStr = String.format("%.1fW", calculatePowerConsumption());
         String statusStr = isOn ? "ON " : "OFF";
-        return String.format("[%-7s] %-20s | Ruang: %-12s | Status: [%s] | Daya: %-8s | %s",
+        return String.format("[%-7s] %-24s | Room: %-12s | Status: [%s] | Power: %-8s | %s",
                 id, name, room, statusStr, powerStr, getStatusSummary());
     }
 }

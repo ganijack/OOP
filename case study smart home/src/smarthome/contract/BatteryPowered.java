@@ -1,29 +1,29 @@
 package smarthome.contract;
 
 /**
- * Interface untuk perangkat pintar yang menggunakan daya baterai portabel.
- * Menandakan kapabilitas "can-do" (dapat beroperasi dengan baterai dan diisi ulang).
+ * Interface representing portable battery-powered operation capability.
+ * Designates a "can-do" capability contract.
  */
 public interface BatteryPowered {
 
     /**
-     * Mendapatkan persentase sisa daya baterai (0 - 100%).
+     * Gets the current remaining battery charge percentage (0 - 100%).
      *
-     * @return persentase level baterai
+     * @return remaining battery level percentage
      */
     int getBatteryLevel();
 
     /**
-     * Memeriksa apakah status baterai sudah berada pada batas kritis/rendah (misal < 20%).
+     * Checks if the device battery has reached a critical low threshold (e.g., <= 20%).
      *
-     * @return true jika baterai rendah, false jika masih cukup
+     * @return true if low battery warning triggered, false otherwise
      */
     boolean isLowBattery();
 
     /**
-     * Melakukan pengisian ulang daya baterai perangkat.
+     * Recharges the internal battery.
      *
-     * @param amount persentase daya yang ditambahkan
+     * @param amount percentage to replenish
      */
     void recharge(int amount);
 }

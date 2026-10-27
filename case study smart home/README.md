@@ -1,107 +1,108 @@
-# Sistem Manajemen Smart Home — Studi Kasus Abstract Class, Interface, Inheritance & Polymorphism
+# Smart Home Management System — Case Study on Abstract Classes, Interfaces, Inheritance & Polymorphism
 
-**Nama:** THORIQ ABDILLAH FALIAN KUSUMA  
-**NIM:** F1D02410098  
-**Kelas:** 5A  
-**Mata Kuliah:** Pemrograman Berorientasi Objek (PBO)  
-**Bahasa:** Java (JDK 11+)
+**Author:** THORIQ ABDILLAH FALIAN KUSUMA  
+**Student ID (NIM):** F1D02410098  
+**Class:** 5A (International Class)  
+**Course:** Object-Oriented Programming (OOP)  
+**Language:** Java (JDK 11+)
 
 ---
 
-## 1. Studi Kasus
+## 1. Case Study Overview
 
-Sistem Manajemen **Smart Home IoT** adalah simulasi ekosistem rumah pintar terpadu yang mengendalikan berbagai perangkat otomatisasi rumah (*smart appliances* & *security*).
+The **Smart Home IoT Management System** is a simulation of an integrated smart home ecosystem designed to centrally manage and monitor various automated home appliances and security devices.
 
-- `SmartHub` bertindak sebagai sentral kendali yang mengelola banyak `SmartDevice`.
-- Jenis perangkat pintar yang didukung:
-  - `SmartLamp` (Lampu pintar dengan kontrol warna, tingkat kecerahan, dan jadwal aktif).
-  - `SmartAC` (Pendingin ruangan dengan kendali suhu, kecepatan kipas, Wi-Fi, dan jadwal).
-  - `SmartCamera` (Kamera pengawas keamanan berbaterai dengan Night Vision dan perekaman cloud/lokal).
-  - `SmartDoorbellCamera` (Bel pintu kamera pintar dengan sensor deteksi gerakan tamu PIR dan bel nada dering).
-- Setiap perangkat memiliki fungsi operasional yang unik serta konsumsi daya listrik (Watt) dinamis.
-- Kemampuan khusus dipasang menggunakan **Interface**:
-  - Hanya perangkat yang membutuhkan koneksi internet yang mengimplementasikan `WiFiConnectable`.
-  - Hanya perangkat nirkabel yang mengimplementasikan `BatteryPowered`.
-  - Perangkat yang mendukung timer otomasi mengimplementasikan `Schedulable`.
+- `SmartHub` serves as the central control unit managing multiple `SmartDevice` instances.
+- Concrete smart devices supported:
+  - `SmartLamp`: Intelligent lighting with brightness adjustment, color selection, and automated scheduling.
+  - `SmartAC`: Climate control unit with target temperature setting, fan speed, Wi-Fi connectivity, and operational scheduling.
+  - `SmartCamera`: Battery-powered surveillance camera with night vision and video recording capabilities.
+  - `SmartDoorbellCamera`: Video doorbell camera featuring a PIR motion detector and a physical chime ring trigger.
+- Each device exhibits unique operational behaviors and dynamic power consumption (in Watts).
+- Specialized capabilities are assigned cleanly using **Interfaces**:
+  - `WiFiConnectable`: Only devices requiring network communication implement this capability.
+  - `BatteryPowered`: Only portable/wireless devices implement battery monitoring and recharging.
+  - `Schedulable`: Devices supporting timer automation implement scheduling features.
 
-### Pemetaan Konsep OOP pada Studi Kasus:
+### OOP Concept Mapping Matrix
 
-| Konsep OOP | Implementasi pada Proyek |
+| OOP Concept | Project Implementation |
 |---|---|
 | **Abstract Class** | `SmartDevice`, `SmartHub` |
 | **Abstract Method** | `SmartDevice.operate()`, `SmartDevice.calculatePowerConsumption()`, `SmartDevice.getStatusSummary()`, `SmartHub.canAccess(User)` |
 | **Interface** | `WiFiConnectable`, `BatteryPowered`, `Schedulable` |
-| **Inheritance (Biasa)** | `SmartLamp extends SmartDevice`, `SmartAC extends SmartDevice`, `SmartCamera extends SmartDevice`, `StandardHomeHub extends SmartHub`, `SecureCloudHub extends SmartHub` |
-| **Inheritance (Bertingkat / Multilevel)** | `SmartDevice` $\rightarrow$ `SmartCamera` $\rightarrow$ `SmartDoorbellCamera` |
-| **Polymorphism (Runtime Overriding)** | Pemanggilan `device.operate()`, `device.calculatePowerConsumption()`, `hub.canAccess(user)` melalui referensi superclass |
-| **Polymorphism (Interface-based)** | Monitoring serentak via `List<BatteryPowered>` dan pengaturan timer via `List<Schedulable>` |
-| **Encapsulation & Validation** | Atribut dibuat `private`, sanitasi input melalui class `Validator`, dan error reporting menggunakan `ValidationException` |
+| **Single Inheritance** | `SmartLamp extends SmartDevice`, `SmartAC extends SmartDevice`, `SmartCamera extends SmartDevice`, `StandardHomeHub extends SmartHub`, `SecureCloudHub extends SmartHub` |
+| **Multilevel Inheritance** | `SmartDevice` $\rightarrow$ `SmartCamera` $\rightarrow$ `SmartDoorbellCamera` |
+| **Polymorphism (Runtime Overriding)** | Dynamic execution of `device.operate()`, `device.calculatePowerConsumption()`, and `hub.canAccess(user)` through abstract superclass references |
+| **Polymorphism (Interface-Based)** | Collective device handling via `List<BatteryPowered>` and `List<Schedulable>` without concrete type coupling |
+| **Encapsulation & Validation** | All fields declared `private`, guarded by `Validator` routines and custom `ValidationException` |
 
 ---
 
-## 2. Struktur Proyek
+## 2. Project Directory Structure
 
 ```
 case-study-smarthome/
-├── README.md
+├── README.md                      # Comprehensive academic documentation
+├── .gitignore                     # Git ignore rules for build artifacts
 ├── docs/
-│   ├── class-diagram.mmd          # Source code Mermaid UML
-│   └── class-diagram.png          # Gambar render Class Diagram UML
+│   ├── class-diagram.mmd          # Mermaid UML source code
+│   └── class-diagram.png          # High-resolution rendered UML Class Diagram
 └── src/smarthome/
-    ├── Main.java                  # Program demonstrasi pengujian utama
-    ├── contract/                  # DAFTAR INTERFACE ("Can-Do" Capability)
-    │   ├── WiFiConnectable.java   # Kontrak kapabilitas konektivitas Wi-Fi
-    │   ├── BatteryPowered.java    # Kontrak kapabilitas baterai & isi ulang
-    │   └── Schedulable.java       # Kontrak kapabilitas timer/penjadwalan
-    ├── exception/                 # Custom Runtime Exception
+    ├── Main.java                  # Main driver demonstrating all OOP principles
+    ├── contract/                  # INTERFACES ("Can-Do" Capabilities)
+    │   ├── WiFiConnectable.java   # Wireless networking capability
+    │   ├── BatteryPowered.java    # Battery management & recharging contract
+    │   └── Schedulable.java       # Automation timer & scheduling contract
+    ├── exception/                 # Custom Exception
     │   └── ValidationException.java
-    ├── validation/                # Validasi data & batasan nilai
+    ├── validation/                # Data sanitization & invariants
     │   └── Validator.java
-    ├── model/                     # HIERARKI PERANGKAT (SmartDevice Hierarchy)
-    │   ├── User.java              # Model penghuni rumah (Admin, Member, Guest)
-    │   ├── SmartDevice.java       # ABSTRACT CLASS (Superclass semua perangkat)
+    ├── model/                     # DEVICE HIERARCHY
+    │   ├── User.java              # System user model (Admin, Member, Guest)
+    │   ├── SmartDevice.java       # ABSTRACT CLASS (Base class for all devices)
     │   ├── SmartLamp.java         # implements Schedulable
     │   ├── SmartAC.java           # implements Schedulable, WiFiConnectable
     │   ├── SmartCamera.java       # implements WiFiConnectable, BatteryPowered
     │   └── SmartDoorbellCamera.java # extends SmartCamera (MULTILEVEL INHERITANCE)
-    └── hub/                       # HIERARKI KONTROLER (SmartHub Hierarchy)
-        ├── SmartHub.java          # ABSTRACT CLASS (Superclass pengelola ekosistem)
-        ├── StandardHomeHub.java   # Hub lokal (akses terbuka keluarga)
-        └── SecureCloudHub.java    # Hub cloud (akses khusus Admin/Owner)
+    └── hub/                       # HUB & CONTROLLER HIERARCHY
+        ├── SmartHub.java          # ABSTRACT CLASS (Central manager)
+        ├── StandardHomeHub.java   # Local hub (Open access for household members)
+        └── SecureCloudHub.java    # Cloud hub (Strict Admin/Owner role-based access)
 ```
 
 ---
 
-## 3. Cara Menjalankan Program
+## 3. How to Compile and Run
 
-### Di Windows (PowerShell):
+### On Windows (PowerShell):
 ```powershell
-# 1. Kompilasi seluruh file Java ke folder 'out'
+# 1. Compile all Java source files into the 'out' directory
 javac -d out (Get-ChildItem -Recurse src -Filter *.java).FullName
 
-# 2. Jalankan program utama
+# 2. Execute the main program
 java -cp out smarthome.Main
 ```
 
-### Di Linux / macOS (Bash):
+### On Linux / macOS (Bash):
 ```bash
-# 1. Kompilasi seluruh file Java ke folder 'out'
+# 1. Compile all Java source files into the 'out' directory
 javac -d out $(find src -name "*.java")
 
-# 2. Jalankan program utama
+# 2. Execute the main program
 java -cp out smarthome.Main
 ```
 
 ---
 
-## 4. Class Diagram (UML)
+## 4. UML Class Diagram
 
-File gambar diagram resolusi tinggi tersedia di: [`docs/class-diagram.png`](docs/class-diagram.png).
+The rendered high-resolution diagram is available at [`docs/class-diagram.png`](docs/class-diagram.png).
 
 ![Class Diagram](docs/class-diagram.png)
 
-### Ringkasan Relasi:
-1. **Hierarki Perangkat:**
+### Structural Relationships:
+1. **Device Inheritance Hierarchy:**
    ```
    SmartDevice (abstract)
    ├── SmartLamp (implements Schedulable)
@@ -109,7 +110,7 @@ File gambar diagram resolusi tinggi tersedia di: [`docs/class-diagram.png`](docs
    └── SmartCamera (implements WiFiConnectable, BatteryPowered)
        └── SmartDoorbellCamera (Multilevel Inheritance)
    ```
-2. **Hierarki Hub:**
+2. **Hub Management Hierarchy:**
    ```
    SmartHub (abstract)
    ├── StandardHomeHub
@@ -118,41 +119,39 @@ File gambar diagram resolusi tinggi tersedia di: [`docs/class-diagram.png`](docs
 
 ---
 
-## 5. Penjelasan Mendalam Konsep OOP
+## 5. In-Depth OOP Concepts Explanation
 
-### 5.1 Abstract Class dan Abstract Method
+### 5.1 Abstract Classes and Abstract Methods
 
-**Abstract class** adalah kelas yang bersifat konseptual dan tidak dapat diinstansiasi secara langsung menggunakan kata kunci `new`. Tujuannya adalah mendefinisikan atribut umum dan kerangka dasar yang wajib dimiliki oleh semua kelas turunannya.
+An **abstract class** is a conceptual blueprint that cannot be directly instantiated with the `new` keyword. It provides shared state and common structure while deferring implementation details to specialized subclasses.
 
-Contoh pada `SmartDevice`:
 ```java
-// KODE INI AKAN MENYEBABKAN ERROR KOMPILASI:
-SmartDevice device = new SmartDevice("D-01", "Alat", "Kamar", 10.0); 
+// THIS PRODUCES A COMPILATION ERROR:
+SmartDevice device = new SmartDevice("D-01", "Generic Device", "Living Room", 10.0);
 // Error: SmartDevice is abstract; cannot be instantiated
 ```
-*Alasannya*: Di dunia nyata, tidak ada objek fisik bernama "Perangkat Pintar" saja. Yang ada adalah bentuk nyatanya seperti Lampu, AC, atau Kamera.
+*Rationale*: In the physical world, a generic "Smart Device" does not exist; only concrete appliances like Lamps, Air Conditioners, and Cameras exist.
 
-`SmartDevice` mendefinisikan **abstract method** tanpa tubuh (*body*):
+`SmartDevice` declares **abstract methods** with no implementation:
 ```java
 public abstract void operate();
 public abstract double calculatePowerConsumption();
 public abstract String getStatusSummary();
 ```
-* Subclass **wajib meng-override** method-method ini. Jika ada subclass yang lupa mengimplementasikannya, program tidak akan bisa dikompilasi.
-* Selain method abstrak, `SmartDevice` juga menyediakan **concrete method** (seperti `turnOn()`, `turnOff()`, dan `describe()`) yang sudah memiliki logika bawaan sehingga tidak perlu ditulis ulang oleh kelas anak.
+* Every subclass **is strictly required to override** these methods. Failure to do so prevents compilation.
+* Alongside abstract methods, `SmartDevice` provides **concrete methods** (`turnOn()`, `turnOff()`, and `describe()`) containing shared invariant logic that subclasses inherit without redundancy.
 
-Konsep serupa juga diterapkan pada abstract class kedua, yaitu `SmartHub`:
+Similarly, `SmartHub` represents another abstract class with an abstract method:
 ```java
 public abstract boolean canAccess(User user);
-public abstract String getHubType();
 ```
-Method `canAccess(User user)` dibuat abstrak karena aturan keamanan akses antara hub lokal rumah dan hub cloud jarak jauh sangat berbeda.
+Authorization logic inherently differs between local household networks and secure remote cloud hubs.
 
 ---
 
-### 5.2 Interface ("Can-Do" Capability)
+### 5.2 Interfaces ("Can-Do" Capabilities)
 
-**Interface** adalah kontrak perilaku/kemampuan (*contract of capability*). Kelas yang mengimplementasikan interface terikat perjanjian untuk menyediakan implementasi konkret dari method yang ada di interface tersebut.
+An **interface** establishes a contract of behavior or capability. Any class implementing an interface guarantees the presence of those declared methods.
 
 ```java
 public interface BatteryPowered {
@@ -162,270 +161,266 @@ public interface BatteryPowered {
 }
 ```
 
-| Interface | Diimplementasikan Oleh | Alasan Desain |
+| Interface | Implemented By | Design Rationale |
 |---|---|---|
-| `WiFiConnectable` | `SmartAC`, `SmartCamera` | Tidak semua alat rumah tangga terhubung ke internet. |
-| `BatteryPowered` | `SmartCamera` (dan `SmartDoorbellCamera`) | Smart AC dan Lampu dicolokkan ke listrik PLN langsung, sedangkan kamera luar ruangan portabel memakai baterai. |
-| `Schedulable` | `SmartLamp`, `SmartAC` | Fitur otomasi menyala dan mati di jam tertentu. |
+| `WiFiConnectable` | `SmartAC`, `SmartCamera` | Not all domestic appliances require Wi-Fi connectivity. |
+| `BatteryPowered` | `SmartCamera` (and `SmartDoorbellCamera`) | Hardwired devices (AC, Lamp) plug directly into AC mains; only portable surveillance devices manage internal batteries. |
+| `Schedulable` | `SmartLamp`, `SmartAC` | Timer automation for power saving and comfort. |
 
-#### Mengapa tidak menaruh method `getBatteryLevel()` langsung di abstract class `SmartDevice`?
-Jika ditaruh di `SmartDevice`, maka `SmartLamp` dan `SmartAC` akan terpaksa memiliki method baterai, padahal keduanya tidak memiliki baterai sama sekali. Interface mencegah *interface pollution* dan menerapkan prinsip **Interface Segregation**.
+#### Why not place `getBatteryLevel()` in `SmartDevice`?
+Placing battery methods inside `SmartDevice` would force `SmartLamp` and `SmartAC` to inherit meaningless battery properties. Using dedicated interfaces enforces the **Interface Segregation Principle (ISP)**.
 
 #### Multiple Interface Implementation
-Di Java, sebuah class hanya boleh memiliki **satu superclass** (`extends`), namun dapat mengimplementasikan **banyak interface** (`implements`).
-Contoh pada `SmartAC`:
+While Java restricts a class to a single superclass (`extends`), it permits multiple interface implementations (`implements`).
+Example in `SmartAC`:
 ```java
 public class SmartAC extends SmartDevice implements Schedulable, WiFiConnectable {
-    // Mewarisi sifat perangkat pintar, sekaligus memiliki kapabilitas Wi-Fi dan Jadwal
+    // Inherits base device behavior while satisfying both scheduling and Wi-Fi contracts
 }
 ```
 
 ---
 
-### 5.3 Inheritance & Multilevel Inheritance
+### 5.3 Inheritance and Multilevel Inheritance
 
-Pewarisan (*inheritance*) memungkinkan subclass menggunakan kembali kode atribut dan method milik superclass tanpa menulis ulang.
+Inheritance facilitates code reuse and models specialization (*is-a* relationship).
 
 #### Single Inheritance:
-`SmartLamp`, `SmartAC`, dan `SmartCamera` langsung mewarisi atribut (`id`, `name`, `room`, `isOn`, `basePowerWatt`) dan method dasar (`turnOn()`, `turnOff()`) dari `SmartDevice`.
+`SmartLamp`, `SmartAC`, and `SmartCamera` directly extend `SmartDevice`, inheriting `id`, `name`, `room`, `isOn`, and `basePowerWatt`.
 
-#### Multilevel Inheritance (Pewarisan Bertingkat):
-Hierarki: `SmartDevice` $\rightarrow$ `SmartCamera` $\rightarrow$ `SmartDoorbellCamera`.
+#### Multilevel Inheritance:
+Chain: `SmartDevice` $\rightarrow$ `SmartCamera` $\rightarrow$ `SmartDoorbellCamera`.
 
-`SmartDoorbellCamera` adalah turunan level 2. Class ini mewarisi:
-1. Seluruh properti `SmartDevice` (status on/off, ID, ruangan).
-2. Seluruh properti dan interface `SmartCamera` (kemampuan Wi-Fi, baterai, sensor video, night vision).
-3. Menambahkan fitur unik baru: sensor deteksi gerak tamu (PIR) dan tombol bel pintu (`pressDoorbell()`).
+`SmartDoorbellCamera` is a level-2 subclass. It automatically inherits:
+1. All core attributes and state from `SmartDevice`.
+2. All surveillance, Wi-Fi, and battery management logic from `SmartCamera`.
+3. Introduces domain-specific capabilities: a PIR motion detection sensor and a physical doorbell chime button (`pressDoorbell()`).
 
 ```java
 public class SmartDoorbellCamera extends SmartCamera {
     public SmartDoorbellCamera(...) {
-        super(id, name, room, basePowerWatt, resolution, initialBattery); // memanggil konstruktor induk
+        super(id, name, room, basePowerWatt, resolution, initialBattery); // Invokes superclass constructor
     }
 
     public void pressDoorbell() {
-        System.out.println("DING-DONG! Tombol bel ditekan!");
-        startRecording(); // memanggil method warisan dari SmartCamera tanpa perlu buat ulang
+        System.out.println("DING-DONG! Doorbell chime activated!");
+        startRecording(); // Directly reuses inherited method from SmartCamera
     }
 }
 ```
 
 ---
 
-### 5.4 Polymorphism (Polimorfisme)
+### 5.4 Polymorphism
 
-Polimorfisme berarti **"banyak bentuk"** — kemampuan mengeksekusi method yang sama melalui tipe referensi umum (parent/interface), tetapi menghasilkan perilaku spesifik sesuai dengan objek aslinya saat runtime.
+Polymorphism ("many forms") allows objects of different concrete types to be manipulated through a unified superclass or interface reference, resolving method calls dynamically at runtime (**Dynamic Method Dispatch**).
 
-#### 1. Runtime Polymorphism via Abstract Class:
-Perhatikan method `calculateTotalPowerConsumption()` pada `SmartHub`:
+#### 1. Runtime Superclass Polymorphism:
+In `SmartHub.calculateTotalPowerConsumption()`:
 ```java
 double totalWatt = 0.0;
 for (SmartDevice device : devices) {
-    // Tipe variabel adalah SmartDevice, tetapi method yang dipanggil
-    // secara dinamis mengikuti logika SmartLamp, SmartAC, atau SmartCamera
+    // Dispatches calculatePowerConsumption() to the concrete runtime instance
     totalWatt += device.calculatePowerConsumption();
 }
 ```
-* Saat giliran `SmartLamp`: konsumsi daya dihitung berdasarkan `basePower * brightness%`.
-* Saat giliran `SmartAC`: konsumsi daya dihitung berdasarkan beban kompresor suhu dan level fan.
-* Saat giliran `SmartDoorbellCamera`: konsumsi daya otomatis menyertakan sensor PIR standby.
+* `SmartLamp`: computes power dynamically scaled to `brightness%`.
+* `SmartAC`: factors in cooling load `(30 - temp) * 35.0W` and fan speed.
+* `SmartDoorbellCamera`: includes additional continuous standby current for the PIR motion sensor.
 
 #### 2. Interface-Based Polymorphism:
-Memperlakukan objek yang berbeda berdasarkan kemampuan bersamanya:
+Enables treating disparate objects uniformly according to shared capabilities:
 ```java
 List<BatteryPowered> batteryDevices = List.of(backyardCamera, frontDoorbell);
 
 for (BatteryPowered dev : batteryDevices) {
     if (dev.isLowBattery()) {
-        dev.recharge(50); // Menangani pengisian daya serentak tanpa peduli jenis kameranya
+        dev.recharge(50); // Recharges any battery-powered unit regardless of device type
     }
 }
 ```
 
-#### 3. Polymorphic Access Control pada `SmartHub`:
+#### 3. Polymorphic Access Verification on `SmartHub`:
 ```java
 List<SmartHub> hubs = List.of(localHub, cloudHub);
 for (SmartHub hub : hubs) {
-    hub.canAccess(user); // StandardHomeHub mengizinkan semua anggota, SecureCloudHub hanya Admin
+    hub.canAccess(user); // StandardHomeHub permits all users; SecureCloudHub restricts to Admins
 }
 ```
 
 ---
 
-### 5.5 Encapsulation dan Validasi Data
+### 5.5 Encapsulation and Data Invariant Protection
 
-Enkapsulasi memastikan integritas data internal objek terlindungi dari modifikasi langsung di luar aturan bisnis.
+Encapsulation ensures an object's internal representation remains shielded from illegal outside manipulation.
 
-1. **Private Fields**: Semua atribut dideklarasikan `private`.
-2. **Controlled Accessors**: Perubahan status hanya melalui method tervalidasi.
-3. **Custom Exception & Validator**:
-   Jika pengguna mencoba memasukkan nilai di luar jangkauan logika:
+1. **Private Fields**: All class fields are strictly marked `private`.
+2. **Mutator Validation**: State changes pass through guarded setters.
+3. **Custom Exception Handling**:
    ```java
-   // Mengatur kecerahan lampu ke 150% (batas: 1-100%)
-   livingRoomLamp.setBrightness(150); 
-   // Memicu: ValidationException("Tingkat Kecerahan Lampu harus bernilai antara 1 dan 100")
+   // Attempting to set AC temperature out of safe bounds (allowed: 16 - 30°C)
+   bedroomAC.setTargetTemperature(35); 
+   // Throws: ValidationException("AC Target Temperature must be between 16 and 30 (given: 35).")
    
-   // Mengatur suhu AC ke 35°C (batas normal: 16-30°C)
-   bedroomAC.setTargetTemperature(35);
-   // Memicu: ValidationException("Suhu Pendingin Ruangan harus bernilai antara 16 dan 30")
+   // Attempting to configure lamp brightness to 150% (allowed: 1 - 100%)
+   livingRoomLamp.setBrightness(150);
+   // Throws: ValidationException("Lamp Brightness must be between 1 and 100 (given: 150).")
    ```
 
 ---
 
-## 6. Output Eksekusi Program
-
-Berikut adalah cuplikan hasil saat program `smarthome.Main` dijalankan:
+## 6. Program Execution Log
 
 ```text
 ===============================================================================================
-                   STUDI KASUS SISTEM MANAJEMEN SMART HOME IOT                                
-             Penerapan Abstract Class, Interface, Inheritance, & Polymorphism                 
+                   SMART HOME IOT DEVICE MANAGEMENT SYSTEM                                     
+             Demonstrating Abstract Class, Interface, Inheritance, & Polymorphism              
 ===============================================================================================
- Nama   : THORIQ ABDILLAH FALIAN KUSUMA
+ Name   : THORIQ ABDILLAH FALIAN KUSUMA
  NIM    : F1D02410098
- Kelas  : 5A
- Matkul : Pemrograman Berorientasi Objek (PBO)
+ Class  : 5A (International Class)
+ Course : Object-Oriented Programming (OOP)
 ===============================================================================================
 
->>> 1. INISIALISASI PENGGUNA SISTEM
+>>> 1. INITIALIZING SYSTEM USERS
   * Thoriq Abdillah (USR-01 [ADMIN])
   * Falian (USR-02 [MEMBER])
   * Budi Santoso (USR-03 [GUEST])
 
->>> 2. REGISTRASI & SETUP PERANGKAT SMART HOME
-  Semua perangkat berhasil diinstansiasi dengan benar.
+>>> 2. REGISTERING & INITIALIZING SMART DEVICES
+  All devices successfully instantiated with valid parameters.
 
->>> 3. MENGHUBUNGKAN PERANGKAT KE JARINGAN WI-FI & JADWAL OTOMATIS
-[AC-01] AC terhubung ke Wi-Fi 'Thoriq_Home_5G' dengan IP: 192.168.1.144.
-[CAM-01] Kamera streaming online via Wi-Fi 'Thoriq_Home_5G' [IP: 192.168.1.171].
-[DBL-01] Kamera streaming online via Wi-Fi 'Thoriq_Home_5G' [IP: 192.168.1.152].
-[LMP-01] Jadwal lampu berhasil disetel: 18:00 s/d 06:00.
-[AC-01] Jadwal AC aktif disetel: 21:30 s/d 05:00.
+>>> 3. CONNECTING TO WI-FI NETWORK & CONFIGURING AUTOMATION SCHEDULES
+[AC-01] AC connected to Wi-Fi 'Thoriq_Home_5G' with IP: 192.168.1.144.
+[CAM-01] Camera streaming online via Wi-Fi 'Thoriq_Home_5G' [IP: 192.168.1.171].
+[DBL-01] Camera streaming online via Wi-Fi 'Thoriq_Home_5G' [IP: 192.168.1.152].
+[LMP-01] Lamp schedule set: 18:00 to 06:00.
+[AC-01] AC schedule set: 21:30 to 05:00.
 
->>> 4. MENGAKTIFKAN & MENJALANKAN FUNGSI OPERASIONAL PERANGKAT
-[LMP-01] Lampu Ruang Tamu di Ruang Tamu berhasil DINYALAKAN.
-[LMP-01] Lampu Ruang Tamu memancarkan cahaya Warm White dengan kecerahan 80% ke seluruh Ruang Tamu.
-[AC-01] AC Kamar Utama di Kamar Tidur berhasil DINYALAKAN.
-[AC-01] AC AC Kamar Utama sedang menghembuskan udara sejuk di Kamar Tidur | Target: 22 C | Fan: Level 3.
-[CAM-01] Kamera Halaman Belakang di Halaman berhasil DINYALAKAN.
-[CAM-01] Mode Night Vision DIAKTIFKAN.
-[CAM-01] Mulai merekam video beresolusi 2K QHD ke penyimpanan lokal/cloud.
-[CAM-01] Kamera Kamera Halaman Belakang memantau area Halaman [2K QHD, NightVision: ON, Baterai: 18%].
-[DBL-01] Bel Pintu Utama di Pintu Depan berhasil DINYALAKAN.
-[DBL-01] Kamera Bel Pintu Utama memantau area Pintu Depan [1080p Full HD, NightVision: OFF, Baterai: 85%].
-   -> [Fitur Khusus Bel] PIR Sensor: SIAGA | Volume Chime: 8/10.
-[ALERT GERAKAN di Pintu Depan]: Seseorang kurir paket terdeteksi di depan pintu!
+>>> 4. POWERING ON & EXECUTING DEVICE OPERATIONS
+[LMP-01] Lamp 'Living Room Lamp' in Living Room powered ON.
+[LMP-01] Living Room Lamp illuminating Living Room with Warm White at 80% brightness.
+[AC-01] AC 'Master Bedroom AC' in Bedroom powered ON.
+[AC-01] Master Bedroom AC actively cooling Bedroom | Target: 22 C | Fan: Level 3.
+[CAM-01] Camera 'Backyard Security Camera' in Backyard powered ON.
+[CAM-01] Night Vision mode ENABLED.
+[CAM-01] Started recording video feed in 2K QHD to cloud/local storage.
+[CAM-01] Backyard Security Camera monitoring Backyard [2K QHD, NightVision: ON, Battery: 18%].
+[DBL-01] Camera 'Front Doorbell Camera' in Front Door powered ON.
+[DBL-01] Front Doorbell Camera monitoring Front Door [1080p Full HD, NightVision: OFF, Battery: 85%].
+   -> [Doorbell Feature] PIR Motion Sensor: ACTIVE | Chime Volume: 8/10.
+[ALERT MOTION at Front Door]: Delivery courier detected near the porch!
 
-[DING-DONG!] Tombol bel di Pintu Depan (Bel Pintu Utama) DITEKAN oleh seseorang! (Vol: 8/10)
->> Mengirim notifikasi push ke smartphone pemilik rumah...
-[DBL-01] Mulai merekam video beresolusi 1080p Full HD ke penyimpanan lokal/cloud.
+[DING-DONG!] Front Doorbell Camera chime PRESSED by a visitor! (Vol: 8/10)
+>> Sending instant push notification to homeowner's smartphone...
+[DBL-01] Started recording video feed in 1080p Full HD to cloud/local storage.
 
->>> 5. DEMO HIERARKI DUA: SMARTHUB (ABSTRACT CLASS & ACCESS CONTROL)
-[Home Local Hub] Perangkat 'Lampu Ruang Tamu' (LMP-01) berhasil didaftarkan ke hub.
-[Home Local Hub] Perangkat 'AC Kamar Utama' (AC-01) berhasil didaftarkan ke hub.
-[Home Local Hub] Perangkat 'Kamera Halaman Belakang' (CAM-01) berhasil didaftarkan ke hub.
-[Home Local Hub] Perangkat 'Bel Pintu Utama' (DBL-01) berhasil didaftarkan ke hub.
-[AWS Smart Cloud Hub] Perangkat 'AC Kamar Utama' (AC-01) berhasil didaftarkan ke hub.
-[AWS Smart Cloud Hub] Perangkat 'Bel Pintu Utama' (DBL-01) berhasil didaftarkan ke hub.
-
-===============================================================================================
-SMART HOME DASHBOARD - [Home Local Hub] (Tipe: Local Standard Hub (Akses Terbuka untuk Semua Penghuni))
-Pemilik: Thoriq Abdillah (USR-01 [ADMIN]) | Total Perangkat: 4 Unit
------------------------------------------------------------------------------------------------
- * [LMP-01 ] Lampu Ruang Tamu     | Ruang: Ruang Tamu   | Status: [ON ] | Daya: 9,6W     | Warna: Warm White, Kecerahan: 80% | Jadwal [18:00 - 06:00]
- * [AC-01  ] AC Kamar Utama       | Ruang: Kamar Tidur  | Status: [ON ] | Daya: 775,0W   | Suhu: 22 C, Fan: Lv3 | WiFi: 192.168.1.144 | Jadwal [21:30 - 05:00]
- * [CAM-01 ] Kamera Halaman Belakang | Ruang: Halaman      | Status: [ON ] | Daya: 10,5W    | Res: 2K QHD | Rekam: REC | Bat: 18% [LOW!] | WiFi: 192.168.1.171
- * [DBL-01 ] Bel Pintu Utama      | Ruang: Pintu Depan  | Status: [ON ] | Daya: 8,7W     | Res: 1080p Full HD | Rekam: REC | Bat: 85% | WiFi: 192.168.1.152 | Chime: Lv8 | PIR: ON
------------------------------------------------------------------------------------------------
-TOTAL ESTIMASI DAYA KONSUMSI SAAT INI: 803,80 WATT
-===============================================================================================
-
->>> UJI AKSES PENGGUNA TERHADAP KEDUA HUB (POLYMORPHISM):
-Pemeriksaan izin pada [Home Local Hub]:
-   - User 'Thoriq Abdillah ' -> Akses: DIIZINKAN (Granted)
-   - User 'Falian          ' -> Akses: DIIZINKAN (Granted)
-   - User 'Budi Santoso    ' -> Akses: DIIZINKAN (Granted)
-Pemeriksaan izin pada [AWS Smart Cloud Hub]:
-   - User 'Thoriq Abdillah ' -> Akses: DIIZINKAN (Granted)
-   - User 'Falian          ' -> Akses: DITOLAK (Denied)
-   - User 'Budi Santoso    ' -> Akses: DITOLAK (Denied)
-
->>> 6. DEMONSTRASI POLIMORFISME BERBASIS INTERFACE
-[A] Monitoring Perangkat Berbaterai (List<BatteryPowered>):
-   * Kamera Halaman Belakang   | Sisa Baterai:  18% | Status Kritis: PERLU DICAS!
-     --> Mengisi daya otomatis untuk Kamera Halaman Belakang...
-[CAM-01] Baterai kamera diisi ulang (+50%). Sisa baterai sekarang: 68%.
-   * Bel Pintu Utama           | Sisa Baterai:  85% | Status Kritis: Aman
-
-[B] Manajemen Jadwal Otomatis (List<Schedulable>):
-   * Lampu Ruang Tamu     -> Jadwal [18:00 - 06:00]
-   * AC Kamar Utama       -> Jadwal [21:30 - 05:00]
-
->>> 7. PENGUJIAN ATURAN VALIDASI DATA (ENCAPSULATION)
-Mencoba melakukan input di luar batas normal untuk menguji proteksi data:
-  [Test 1] Menyetel suhu AC ke 35 C: GAGAL (Sesuai Harapan) -> Suhu Pendingin Ruangan (C) harus bernilai antara 16 dan 30 (diberikan: 35).
-  [Test 2] Menyetel kecerahan lampu ke 150%: GAGAL (Sesuai Harapan) -> Tingkat Kecerahan Lampu harus bernilai antara 1 dan 100 (diberikan: 150).
-  [Test 3] Menghubungkan WiFi dengan SSID kosong: GAGAL (Sesuai Harapan) -> SSID Wi-Fi tidak boleh kosong atau null.
-
->>> 8. POLIMORFISME RUTINITAS: SHUTDOWN SELURUH PERANGKAT OLEH ADMIN
-
->>> Eksekusi Rutinitas 'Matikan Semua Perangkat' oleh Thoriq Abdillah...
-[LMP-01] Lampu Ruang Tamu di Ruang Tamu berhasil DIMATIKAN.
-[AC-01] AC Kamar Utama di Kamar Tidur berhasil DIMATIKAN.
-[CAM-01] Kamera Halaman Belakang di Halaman berhasil DIMATIKAN.
-[DBL-01] Bel Pintu Utama di Pintu Depan berhasil DIMATIKAN.
-[SUKSES] Seluruh perangkat di Home Local Hub berhasil dipadamkan.
+>>> 5. SECOND HIERARCHY DEMONSTRATION: SMARTHUB & ACCESS CONTROL
+[Home Local Hub] Device 'Living Room Lamp' (LMP-01) registered to hub.
+[Home Local Hub] Device 'Master Bedroom AC' (AC-01) registered to hub.
+[Home Local Hub] Device 'Backyard Security Camera' (CAM-01) registered to hub.
+[Home Local Hub] Device 'Front Doorbell Camera' (DBL-01) registered to hub.
+[AWS Smart Cloud Hub] Device 'Master Bedroom AC' (AC-01) registered to hub.
+[AWS Smart Cloud Hub] Device 'Front Doorbell Camera' (DBL-01) registered to hub.
 
 ===============================================================================================
-SMART HOME DASHBOARD - [Home Local Hub] (Tipe: Local Standard Hub (Akses Terbuka untuk Semua Penghuni))
-Pemilik: Thoriq Abdillah (USR-01 [ADMIN]) | Total Perangkat: 4 Unit
+SMART HOME DASHBOARD - [Home Local Hub] (Type: Local Standard Hub (Open Access for Household))
+Owner: Thoriq Abdillah (USR-01 [ADMIN]) | Total Devices: 4 Units
 -----------------------------------------------------------------------------------------------
- * [LMP-01 ] Lampu Ruang Tamu     | Ruang: Ruang Tamu   | Status: [OFF] | Daya: 0,5W     | Warna: Warm White, Kecerahan: 80% | Jadwal [18:00 - 06:00]
- * [AC-01  ] AC Kamar Utama       | Ruang: Kamar Tidur  | Status: [OFF] | Daya: 2,5W     | Suhu: 22 C, Fan: Lv3 | WiFi: 192.168.1.144 | Jadwal [21:30 - 05:00]
- * [CAM-01 ] Kamera Halaman Belakang | Ruang: Halaman      | Status: [OFF] | Daya: 0,8W     | Res: 2K QHD | Rekam: REC | Bat: 68% | WiFi: 192.168.1.171
- * [DBL-01 ] Bel Pintu Utama      | Ruang: Pintu Depan  | Status: [OFF] | Daya: 2,0W     | Res: 1080p Full HD | Rekam: REC | Bat: 85% | WiFi: 192.168.1.152 | Chime: Lv8 | PIR: ON
+ * [LMP-01 ] Living Room Lamp     | Room: Living Room  | Status: [ON ] | Power: 9.6W     | Color: Warm White, Brightness: 80% | Schedule [18:00 - 06:00]
+ * [AC-01  ] Master Bedroom AC    | Room: Bedroom      | Status: [ON ] | Power: 775.0W   | Temp: 22 C, Fan: Lv3 | WiFi: 192.168.1.144 | Schedule [21:30 - 05:00]
+ * [CAM-01 ] Backyard Security Camera | Room: Backyard     | Status: [ON ] | Power: 10.5W    | Res: 2K QHD | Rec: REC | Bat: 18% [LOW!] | WiFi: 192.168.1.171
+ * [DBL-01 ] Front Doorbell Camera | Room: Front Door   | Status: [ON ] | Power: 8.7W     | Res: 1080p Full HD | Rec: REC | Bat: 85% | WiFi: 192.168.1.152 | Chime: Lv8 | PIR: ON
 -----------------------------------------------------------------------------------------------
-TOTAL ESTIMASI DAYA KONSUMSI SAAT INI: 5,80 WATT
+TOTAL ESTIMATED POWER CONSUMPTION: 803.80 WATTS
 ===============================================================================================
 
-[SUKSES] Seluruh pengujian konsep OOP Smart Home telah berhasil dijalankan!
+>>> ACCESS CONTROL VERIFICATION (POLYMORPHISM):
+Access checks on [Home Local Hub]:
+   - User 'Thoriq Abdillah ' -> Access: GRANTED
+   - User 'Falian          ' -> Access: GRANTED
+   - User 'Budi Santoso    ' -> Access: GRANTED
+Access checks on [AWS Smart Cloud Hub]:
+   - User 'Thoriq Abdillah ' -> Access: GRANTED
+   - User 'Falian          ' -> Access: DENIED
+   - User 'Budi Santoso    ' -> Access: DENIED
+
+>>> 6. INTERFACE-BASED POLYMORPHISM DEMONSTRATION
+[A] Battery-Powered Device Management (List<BatteryPowered>):
+   * Backyard Security Camera   | Battery:  18% | Low Warning: CRITICAL (CHARGE NEEDED!)
+     --> Triggering automatic recharge for Backyard Security Camera...
+[CAM-01] Camera battery recharged (+50%). Current battery: 68%.
+   * Front Doorbell Camera      | Battery:  85% | Low Warning: Normal
+
+[B] Automated Schedule Management (List<Schedulable>):
+   * Living Room Lamp     -> Schedule [18:00 - 06:00]
+   * Master Bedroom AC    -> Schedule [21:30 - 05:00]
+
+>>> 7. ENCAPSULATION & DATA VALIDATION TESTING (EXCEPTION HANDLING)
+Attempting out-of-bounds parameter inputs to confirm data integrity safeguards:
+  [Test 1] Setting AC temperature to 35 C: REJECTED (Expected) -> AC Target Temperature (C) must be between 16 and 30 (given: 35).
+  [Test 2] Setting Lamp brightness to 150%: REJECTED (Expected) -> Lamp Brightness must be between 1 and 100 (given: 150).
+  [Test 3] Connecting Wi-Fi with blank SSID: REJECTED (Expected) -> Wi-Fi SSID must not be empty or null.
+
+>>> 8. POLYMORPHIC ROUTINE: CENTRALIZED SHUTDOWN BY ADMIN
+
+>>> Executing 'Turn Off All Devices' routine by Thoriq Abdillah...
+[LMP-01] Lamp 'Living Room Lamp' in Living Room powered OFF.
+[AC-01] AC 'Master Bedroom AC' in Bedroom powered OFF.
+[CAM-01] Camera 'Backyard Security Camera' in Backyard powered OFF.
+[DBL-01] Camera 'Front Doorbell Camera' in Front Door powered OFF.
+[SUCCESS] All devices in Home Local Hub successfully turned off.
+
+===============================================================================================
+SMART HOME DASHBOARD - [Home Local Hub] (Type: Local Standard Hub (Open Access for Household))
+Owner: Thoriq Abdillah (USR-01 [ADMIN]) | Total Devices: 4 Units
+-----------------------------------------------------------------------------------------------
+ * [LMP-01 ] Living Room Lamp     | Room: Living Room  | Status: [OFF] | Power: 0.5W     | Color: Warm White, Brightness: 80% | Schedule [18:00 - 06:00]
+ * [AC-01  ] Master Bedroom AC    | Room: Bedroom      | Status: [OFF] | Power: 2.5W     | Temp: 22 C, Fan: Lv3 | WiFi: 192.168.1.144 | Schedule [21:30 - 05:00]
+ * [CAM-01 ] Backyard Security Camera | Room: Backyard     | Status: [OFF] | Power: 0.8W     | Res: 2K QHD | Rec: REC | Bat: 68% | WiFi: 192.168.1.171
+ * [DBL-01 ] Front Doorbell Camera | Room: Front Door   | Status: [OFF] | Power: 2.0W     | Res: 1080p Full HD | Rec: REC | Bat: 85% | WiFi: 192.168.1.152 | Chime: Lv8 | PIR: ON
+-----------------------------------------------------------------------------------------------
+TOTAL ESTIMATED POWER CONSUMPTION: 5.80 WATTS
+===============================================================================================
+
+[SUCCESS] All OOP concepts for the Smart Home Case Study have been validated successfully!
 ```
 
 ---
 
-## 7. Format Jawaban Pengumpulan Forum
+## 7. Submission Template for Academic Forum
 
-Salin teks berikut untuk di-submit ke forum kuliah:
+Copy and paste the template below to submit your assignment:
 
 ```text
 Subject: 5A_F1D02410098_THORIQ ABDILLAH FALIAN KUSUMA
 
 Message:
-[Sisipkan / Upload Gambar docs/class-diagram.png]
+[Attach / Upload docs/class-diagram.png]
 
-Link Repository (Public):
+Repository Link (Public):
 https://github.com/ganijack/OOP/tree/main/case%20study%20smart%20home
 
 Brief Explanation:
-Studi kasus ini berjudul "Sistem Manajemen Smart Home IoT", sebuah simulasi pengendalian ekosistem rumah pintar terpadu. Sistem ini mengelola berbagai perangkat otomatisasi seperti lampu pintar, AC, kamera pengawas, dan bel pintu pintar melalui sentral kendali (SmartHub).
+This case study is titled "Smart Home IoT Device Management System", simulating an integrated smart home ecosystem where an automation hub (SmartHub) oversees and controls diverse appliances such as Smart Lamps, Smart ACs, Surveillance Cameras, and Video Doorbells.
 
-Konsep OOP yang diimplementasikan:
+Core OOP Concepts Implemented:
 1. Abstract Class & Abstract Method:
-   - SmartDevice mendefinisikan abstract method operate(), calculatePowerConsumption(), dan getStatusSummary().
-   - SmartHub mendefinisikan abstract method canAccess(User) dan getHubType().
+   - SmartDevice defines abstract methods: operate(), calculatePowerConsumption(), and getStatusSummary().
+   - SmartHub defines abstract methods: canAccess(User) and getHubType().
 2. Interface:
-   - WiFiConnectable diimplementasikan oleh SmartAC dan SmartCamera.
-   - BatteryPowered diimplementasikan oleh SmartCamera.
-   - Schedulable diimplementasikan oleh SmartLamp dan SmartAC.
-   Hal ini memisahkan kapabilitas agar hanya dipasang pada perangkat yang relevan (Interface Segregation).
+   - WiFiConnectable is implemented by SmartAC and SmartCamera.
+   - BatteryPowered is implemented by SmartCamera.
+   - Schedulable is implemented by SmartLamp and SmartAC.
+   This enforces the Interface Segregation Principle, attaching capabilities only where functionally appropriate.
 3. Inheritance:
-   - Single Inheritance: SmartLamp, SmartAC, SmartCamera terhadap SmartDevice, serta StandardHomeHub dan SecureCloudHub terhadap SmartHub.
-   - Multilevel Inheritance: SmartDevice -> SmartCamera -> SmartDoorbellCamera. SmartDoorbellCamera mewarisi seluruh kemampuan SmartCamera dan menambahkan sensor gerak PIR serta tombol bel pintu.
+   - Single Inheritance: SmartLamp, SmartAC, and SmartCamera extend SmartDevice; StandardHomeHub and SecureCloudHub extend SmartHub.
+   - Multilevel Inheritance: SmartDevice -> SmartCamera -> SmartDoorbellCamera. SmartDoorbellCamera reuses all camera functionalities and adds PIR motion detection plus a physical doorbell chime trigger.
 4. Polymorphism:
-   - Runtime Polymorphism: Pemanggilan calculatePowerConsumption() dan canAccess(User) dieksekusi melalui tipe induk/abstrak, namun perilakunya dinamis mengikuti objek aslinya tanpa pengecekan instanceof.
-   - Interface Polymorphism: Pengelolaan koleksi berbasis interface List<BatteryPowered> dan List<Schedulable>.
+   - Dynamic Method Dispatch (Runtime): Calling calculatePowerConsumption() and canAccess(User) through superclass references executes subclass-specific logic without instanceof checks.
+   - Interface-based Polymorphism: Group management via List<BatteryPowered> and List<Schedulable>.
 5. Encapsulation:
-   - Seluruh field bersifat private, mutasi status hanya dapat melalui method dengan validasi ketat menggunakan class Validator dan custom ValidationException.
+   - All properties are declared private. State mutations are guarded by strict boundary validation using a custom Validator class and ValidationException.
 
-Penjelasan lengkap kode dan dokumentasi teknis tersedia pada file README.md di repositori.
+Comprehensive code documentation and conceptual walkthroughs are available in the repository README.md.
 ```

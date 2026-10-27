@@ -1,8 +1,8 @@
 package smarthome.exception;
 
 /**
- * Custom Exception untuk menangani kesalahan validasi input data
- * pada sistem Smart Home.
+ * Custom runtime exception to handle domain validation errors
+ * within the Smart Home ecosystem.
  */
 public class ValidationException extends RuntimeException {
     public ValidationException(String message) {

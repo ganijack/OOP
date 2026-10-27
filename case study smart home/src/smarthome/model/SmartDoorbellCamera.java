@@ -3,18 +3,17 @@ package smarthome.model;
 import smarthome.validation.Validator;
 
 /**
- * SUBCLASS: SmartDoorbellCamera (Bel Pintu Kamera Pintar)
- * Mewarisi SmartCamera (yang mana SmartCamera mewarisi SmartDevice).
- * Menerapkan konsep INHERITANCE BERTINGKAT (MULTILEVEL INHERITANCE):
+ * SUBCLASS: SmartDoorbellCamera (Smart Video Doorbell)
+ * Extends SmartCamera (which in turn extends SmartDevice).
+ * Implements MULTILEVEL INHERITANCE:
  * SmartDevice -> SmartCamera -> SmartDoorbellCamera.
  *
- * Menggunakan kembali method superclass (recharge, connectWiFi, dsb)
- * tanpa perlu mendefinisikan ulang kodenya, serta menambahkan fungsionalitas baru
- * seperti pendeteksi gerakan (PIR Sensor) dan tombol bel pintu.
+ * Inherits and reuses all camera capabilities while adding specialized
+ * porch security features such as PIR motion alerts and chime triggers.
  */
 public class SmartDoorbellCamera extends SmartCamera {
 
-    private int chimeVolume; // Volume bel pintu (level 1 - 10)
+    private int chimeVolume; // Chime loudness (level 1 - 10)
     private boolean motionDetectionEnabled;
 
     public SmartDoorbellCamera(String id, String name, String room, double basePowerWatt,
@@ -25,7 +24,7 @@ public class SmartDoorbellCamera extends SmartCamera {
     }
 
     public void setChimeVolume(int volume) {
-        Validator.requireRange(volume, 1, 10, "Volume Nada Dering Bel");
+        Validator.requireRange(volume, 1, 10, "Doorbell Chime Volume");
         this.chimeVolume = volume;
     }
 
@@ -35,52 +34,51 @@ public class SmartDoorbellCamera extends SmartCamera {
 
     public void toggleMotionDetection(boolean enable) {
         this.motionDetectionEnabled = enable;
-        System.out.printf("[%s] Sensor Deteksi Gerakan Tamu %s.%n",
-                getId(), enable ? "DIAKTIFKAN" : "DINONAKTIFKAN");
+        System.out.printf("[%s] PIR Motion Detection sensor %s.%n",
+                getId(), enable ? "ENABLED" : "DISABLED");
     }
 
     /**
-     * Fitur khusus bel pintu: Tamu menekan bel di depan pintu rumah.
-     * Otomatis memicu perekaman video singkat dari method induk (startRecording).
+     * Specialized doorbell action: visitor presses the physical chime button.
+     * Automatically triggers short video recording via inherited startRecording() method.
      */
     public void pressDoorbell() {
-        System.out.printf("%n[DING-DONG!] Tombol bel di %s (%s) DITEKAN oleh seseorang! (Vol: %d/10)%n",
-                getRoom(), getName(), chimeVolume);
-        System.out.println(">> Mengirim notifikasi push ke smartphone pemilik rumah...");
-        startRecording(); // memanggil method warisan dari SmartCamera
+        System.out.printf("%n[DING-DONG!] %s chime PRESSED by a visitor! (Vol: %d/10)%n",
+                getName(), chimeVolume);
+        System.out.println(">> Sending instant push notification to homeowner's smartphone...");
+        startRecording(); // Reuses inherited method from SmartCamera
     }
 
     /**
-     * Fitur deteksi gerakan di depan pintu.
+     * Motion sensor trigger.
      */
     public void triggerMotionAlert(String description) {
         if (!motionDetectionEnabled) {
             return;
         }
-        System.out.printf("[ALERT GERAKAN di %s]: %s terdeteksi di depan pintu!%n", getRoom(), description);
+        System.out.printf("[ALERT MOTION at %s]: %s!%n", getRoom(), description);
     }
 
     // ==========================================
-    // OVERRIDE DARI SUPERCLASS DENGAN LOGIKA SUPER
+    // OVERRIDES WITH SUPERCLASS METHOD REUSE
     // ==========================================
 
     @Override
     public void operate() {
-        super.operate(); // menjalankan tugas dasar kamera pemantau
-        System.out.printf("   -> [Fitur Khusus Bel] PIR Sensor: %s | Volume Chime: %d/10.%n",
-                motionDetectionEnabled ? "SIAGA" : "OFF", chimeVolume);
+        super.operate(); // Runs base camera surveillance operations
+        System.out.printf("   -> [Doorbell Feature] PIR Motion Sensor: %s | Chime Volume: %d/10.%n",
+                motionDetectionEnabled ? "ACTIVE" : "OFF", chimeVolume);
     }
 
     @Override
     public double calculatePowerConsumption() {
-        // Konsumsi daya kamera biasa ditambah daya sensor gerak PIR yang selalu standby
+        // Base camera power + continuous PIR motion sensor standby current
         double baseCameraPower = super.calculatePowerConsumption();
         return baseCameraPower + (motionDetectionEnabled ? 1.2 : 0.2);
     }
 
     @Override
     public String getStatusSummary() {
-        // Menggabungkan ringkasan kamera dari superclass dengan fitur bel
         return super.getStatusSummary() + String.format(" | Chime: Lv%d | PIR: %s",
                 chimeVolume, motionDetectionEnabled ? "ON" : "OFF");
     }

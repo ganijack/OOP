@@ -4,13 +4,13 @@ import smarthome.contract.Schedulable;
 import smarthome.validation.Validator;
 
 /**
- * SUBCLASS: SmartLamp (Lampu Pintar)
- * Mewarisi SmartDevice dan mengimplementasikan Schedulable.
+ * SUBCLASS: SmartLamp (Intelligent Lighting)
+ * Extends SmartDevice and implements Schedulable.
  */
 public class SmartLamp extends SmartDevice implements Schedulable {
 
     private int brightness; // 1 - 100%
-    private String color;    // misal "Warm White", "Cool Daylight", "RGB Blue"
+    private String color;    // e.g., "Warm White", "Cool Daylight", "RGB Blue"
     private String scheduleStart;
     private String scheduleEnd;
 
@@ -21,12 +21,12 @@ public class SmartLamp extends SmartDevice implements Schedulable {
     }
 
     public void setBrightness(int brightness) {
-        Validator.requireRange(brightness, 1, 100, "Tingkat Kecerahan Lampu");
+        Validator.requireRange(brightness, 1, 100, "Lamp Brightness");
         this.brightness = brightness;
     }
 
     public void setColor(String color) {
-        Validator.requireNonEmpty(color, "Warna Lampu");
+        Validator.requireNonEmpty(color, "Lamp Color");
         this.color = color.trim();
     }
 
@@ -39,31 +39,31 @@ public class SmartLamp extends SmartDevice implements Schedulable {
     }
 
     // ==========================================
-    // OVERRIDE DARI ABSTRACT CLASS (SmartDevice)
+    // OVERRIDES FROM ABSTRACT CLASS (SmartDevice)
     // ==========================================
 
     @Override
     public void operate() {
         if (!isOn()) {
-            System.out.printf("[%s] %s tidak dapat beroperasi karena perangkat sedang MATI.%n", getId(), getName());
+            System.out.printf("[%s] %s cannot operate because device is OFF.%n", getId(), getName());
             return;
         }
-        System.out.printf("[%s] %s memancarkan cahaya %s dengan kecerahan %d%% ke seluruh %s.%n",
-                getId(), getName(), color, brightness, getRoom());
+        System.out.printf("[%s] %s illuminating %s with %s at %d%% brightness.%n",
+                getId(), getName(), getRoom(), color, brightness);
     }
 
     @Override
     public double calculatePowerConsumption() {
         if (!isOn()) {
-            return 0.5; // Konsumsi daya standby modul elektronik saat OFF (Watt)
+            return 0.5; // Microcontroller standby power when OFF (Watts)
         }
-        // Konsumsi daya aktif proporsional dengan tingkat kecerahan
+        // Active power proportional to brightness setting
         return getBasePowerWatt() * (brightness / 100.0);
     }
 
     @Override
     public String getStatusSummary() {
-        String base = String.format("Warna: %s, Kecerahan: %d%%", color, brightness);
+        String base = String.format("Color: %s, Brightness: %d%%", color, brightness);
         if (isScheduleActive()) {
             base += " | " + getScheduleInfo();
         }
@@ -71,23 +71,23 @@ public class SmartLamp extends SmartDevice implements Schedulable {
     }
 
     // ==========================================
-    // IMPLEMENTASI DARI INTERFACE (Schedulable)
+    // IMPLEMENTATION OF INTERFACE (Schedulable)
     // ==========================================
 
     @Override
     public void setSchedule(String startTime, String endTime) {
-        Validator.requireNonEmpty(startTime, "Waktu Mulai Jadwal");
-        Validator.requireNonEmpty(endTime, "Waktu Selesai Jadwal");
+        Validator.requireNonEmpty(startTime, "Schedule Start Time");
+        Validator.requireNonEmpty(endTime, "Schedule End Time");
         this.scheduleStart = startTime;
         this.scheduleEnd = endTime;
-        System.out.printf("[%s] Jadwal lampu berhasil disetel: %s s/d %s.%n", getId(), startTime, endTime);
+        System.out.printf("[%s] Lamp schedule set: %s to %s.%n", getId(), startTime, endTime);
     }
 
     @Override
     public void clearSchedule() {
         this.scheduleStart = null;
         this.scheduleEnd = null;
-        System.out.printf("[%s] Jadwal lampu dibatalkan.%n", getId());
+        System.out.printf("[%s] Lamp schedule cleared.%n", getId());
     }
 
     @Override
@@ -98,8 +98,8 @@ public class SmartLamp extends SmartDevice implements Schedulable {
     @Override
     public String getScheduleInfo() {
         if (isScheduleActive()) {
-            return String.format("Jadwal [%s - %s]", scheduleStart, scheduleEnd);
+            return String.format("Schedule [%s - %s]", scheduleStart, scheduleEnd);
         }
-        return "Tidak ada jadwal";
+        return "No schedule";
     }
 }

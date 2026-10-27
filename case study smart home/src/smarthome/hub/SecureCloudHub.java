@@ -4,9 +4,9 @@ import smarthome.model.User;
 import smarthome.validation.Validator;
 
 /**
- * SUBCLASS: SecureCloudHub (Hub Cloud Terenkripsi Berkeamanan Tinggi)
- * Memungkinkan kontrol perangkat jarak jauh melalui internet/cloud.
- * Menerapkan kontrol akses ketat: Hanya user dengan role "ADMIN" yang dapat mengontrol.
+ * SUBCLASS: SecureCloudHub (High-Security Cloud Hub)
+ * Allows encrypted remote device management over the internet.
+ * Enforces strict Role-Based Access Control (RBAC): Only ADMIN users are authorized.
  */
 public class SecureCloudHub extends SmartHub {
 
@@ -23,13 +23,13 @@ public class SecureCloudHub extends SmartHub {
         if (user == null) {
             return false;
         }
-        // Hanya pemilik utama atau user dengan role ADMIN yang diizinkan mengakses kontrol cloud
+        // Cloud control restricted to Admin users or the primary account owner
         return user.isAdmin() || user.getUserId().equals(getOwner().getUserId());
     }
 
     @Override
     public String getHubType() {
-        return "Secure Cloud Hub [Region: " + serverRegion + "] (Hanya Akses Admin/Owner)";
+        return "Secure Cloud Hub [Region: " + serverRegion + "] (Admin/Owner Exclusive)";
     }
 
     public String getServerRegion() {
