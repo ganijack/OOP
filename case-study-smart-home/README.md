@@ -399,7 +399,7 @@ Message:
 [Attach / Upload docs/class-diagram.png]
 
 Repository Link (Public):
-https://github.com/ganijack/OOP/tree/main/case%20study%20smart%20home
+https://github.com/ganijack/OOP/tree/main/case-study-smart-home
 
 Brief Explanation:
 This case study is titled "Smart Home IoT Device Management System", simulating an integrated smart home ecosystem where an automation hub (SmartHub) oversees and controls diverse appliances such as Smart Lamps, Smart ACs, Surveillance Cameras, and Video Doorbells.
